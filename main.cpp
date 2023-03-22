@@ -144,6 +144,7 @@ int main()
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
+            //get the location of the sprites
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left && wpass1 != true) {
                     sf::Vector2f mouse1 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -156,6 +157,7 @@ int main()
                     sf::FloatRect bounds7 = sprite7.getGlobalBounds();
                     sf::FloatRect bounds8 = sprite8.getGlobalBounds();
                     sf::FloatRect bounds9 = sprite9.getGlobalBounds();
+                   // checks if mouse click iss in a spite and changes the prite to a "x" or an "o"
                     if (bounds1.contains(mouse1) && playOnce1 != true) {
                         switch (player) {
                             case 1:
