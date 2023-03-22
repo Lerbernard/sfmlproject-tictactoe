@@ -309,10 +309,9 @@ int main()
                 }
             }
 
-
-            if(playOnce1 == true){
-             winscreen.setFillColor(sf::Color(138,43,226,200));
-            }
+            //if(playOnce1 == true){
+            // winscreen.setFillColor(sf::Color(138,43,226,200));
+            //}
 
         }
 // displays the board
