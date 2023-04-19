@@ -7,10 +7,17 @@
 #define Bcolor  Yellow
 #define color  Red
 
+void sleep(float seconds){
+    clock_t startClock = clock();
+    float secondsAhead = seconds * CLOCKS_PER_SEC;
+// do nothing until the elapsed time has passed.
+    while(clock() < startClock+secondsAhead);
+    return;
+}
 
 int reset(sf::Sprite & sprite1, sf::Sprite & sprite2, sf::Sprite & sprite3, sf::Sprite & sprite4, sf::Sprite & sprite5,
           sf::Sprite & sprite6, sf::Sprite & sprite7, sf::Sprite & sprite8, sf::Sprite & sprite9,
-          sf::Texture & textureclear, sf::Text & text2, sf::Text & text3, sf::Text & text4,
+          sf::Texture & textureclear, sf::Text & text2, sf::Text & text3,sf::Text & text11, sf::Text & text4,
           sf::RectangleShape & winMenu1, sf::RectangleShape & winMenu2, bool & playOnce1, bool & playOnce2, bool & playOnce3,
           bool & playOnce4, bool & playOnce5, bool & playOnce6, bool & playOnce7, bool & playOnce8,
           bool & playOnce9, sf::RectangleShape & winscreen, int & player, sf::Text & text5);
@@ -19,6 +26,7 @@ int main()
 {
  winCon loction = winCon();
  bool scoreOnce = false;
+ bool play = false;
     int player1score = 0;
     int player2score = 0;
 // use to determine whether player 1 or player 2 is playing
@@ -33,10 +41,12 @@ int main()
     bool playOnce7 = false;
     bool playOnce8 = false;
     bool playOnce9 = false;
+    bool playOnce300 = false;
 
 // used to make the sprite click once
     bool wpass1;
     bool wpass2;
+    bool wpass3;
 
 
 // makes the window
@@ -48,34 +58,54 @@ int main()
     shape.setPosition(0.f, 0.f);
     shape.setFillColor(sf::Color::Bcolor);
 
+    sf::RectangleShape firstScreen;
+    firstScreen.setSize(sf::Vector2f(700.f, 700.f));
+    firstScreen.setPosition(0.f, 0.f);
+    firstScreen.setFillColor(sf::Color::Bcolor);
 
     sf::RectangleShape winscreen;
     winscreen.setSize(sf::Vector2f(700.f, 700.f));
     winscreen.setPosition(0.f, 0.f);
-    winscreen.setFillColor(sf::Color(255,255,255,0));
+    winscreen.setFillColor(sf::Color::Transparent);
 
 // setting for the displayed text
     sf::Font myfont;
     myfont.loadFromFile("../COMIC.ttf");
+
+
     sf::Text text("welcome to lee's tic-tac-toc game",myfont,30);
     text.setPosition(100.f,60.f);
     text.setFillColor(sf::Color::color);
 
+    sf::Text Playagemtext("play",myfont,100);
+    Playagemtext.setPosition(260.f,410.f);
+    Playagemtext.setFillColor(sf::Color::Bcolor);
+
+    sf::RectangleShape playGame;
+    playGame.setFillColor(sf::Color::color);
+    playGame.setSize(sf::Vector2f(300.f, 170.f));
+    playGame.setPosition(200,400);
+
+
     sf::Text text2("o wins",myfont,200);
     text2.setPosition(70.f,50.f);
-    text2.setFillColor(sf::Color(255,255,255,0));
+    text2.setFillColor(sf::Color::Transparent);
 
     sf::Text text3("x wins",myfont,200);
     text3.setPosition(70.f,50.f);
-    text3.setFillColor(sf::Color(255,255,255,0));
+    text3.setFillColor(sf::Color::Transparent);
+
+    sf::Text text11("you both lose",myfont,90);
+    text11.setPosition(80.f,45.f);
+    text11.setFillColor(sf::Color::Transparent);
 
     sf::Text text4("exit",myfont,100);
     text4.setPosition(90.f,395.f);
-    text4.setFillColor(sf::Color(255,255,255,0));
+    text4.setFillColor(sf::Color::Transparent);
 
     sf::Text text5("play \n again",myfont,50);
     text5.setPosition(450.f,395.f);
-    text5.setFillColor(sf::Color(255,255,255,0));
+    text5.setFillColor(sf::Color::Transparent);
 
 
 
@@ -91,12 +121,12 @@ int main()
 
 
     sf::RectangleShape winMenu1;
-    winMenu1.setFillColor(sf::Color(255,255,255,0));
+    winMenu1.setFillColor(sf::Color::Transparent);
     winMenu1.setSize(sf::Vector2f(250.f, 130.f));
     winMenu1.setPosition(60,400);
 
     sf::RectangleShape winMenu2;
-    winMenu2.setFillColor(sf::Color(255,255,255,0));
+    winMenu2.setFillColor(sf::Color::Transparent);
     winMenu2.setSize(sf::Vector2f(250.f, 130.f));
     winMenu2.setPosition(390,400);
 
@@ -206,9 +236,30 @@ int main()
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            //get the location of the sprites
             if (event.type == sf::Event::MouseButtonPressed) {
-                if (event.mouseButton.button == sf::Mouse::Left && wpass1 != true) {
+                if (event.mouseButton.button == sf::Mouse::Left && wpass3 != true) {
+                    sf::Vector2f mouse300 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                    sf::FloatRect bounds300 = playGame.getGlobalBounds();
+                    if (bounds300.contains(mouse300) && playOnce300 != true) {
+                        firstScreen.setFillColor(sf::Color::Transparent);
+                        text.setFillColor(sf::Color::Transparent);
+                        Playagemtext.setFillColor(sf::Color::Transparent);
+                        playGame.setFillColor(sf::Color::Transparent);
+                        play = true;
+
+                    }
+                    wpass3 = true;
+                }
+            }
+            if (event.type == sf::Event::MouseButtonReleased) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    wpass3 = false;
+                }
+            }
+            //get the location of the sprites
+            if (event.type == sf::Event::MouseButtonPressed && play == true ) {
+                if (event.mouseButton.button == sf::Mouse::Left && wpass1 != true /* && wpass3 == false*/) {
+
                     sf::Vector2f mouse1 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                     sf::FloatRect bounds1 = sprite1.getGlobalBounds();
                     sf::FloatRect bounds2 = sprite2.getGlobalBounds();
@@ -219,7 +270,7 @@ int main()
                     sf::FloatRect bounds7 = sprite7.getGlobalBounds();
                     sf::FloatRect bounds8 = sprite8.getGlobalBounds();
                     sf::FloatRect bounds9 = sprite9.getGlobalBounds();
-                   // checks if mouse click iss in a spite and changes the prite to a "x" or an "o"
+                    // checks if mouse click iss in a spite and changes the prite to a "x" or an "o"
                     if (bounds1.contains(mouse1) && playOnce1 != true) {
                         switch (player) {
                             case 1:
@@ -432,9 +483,9 @@ int main()
                             std::cout << player1score;
                             player1score ++;
                             loction.reset2();
-                            reset(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6, sprite7, sprite8, sprite9,
-                                  textureclear, text2, text3, text4, winMenu1, winMenu2, playOnce1, playOnce2,
-                                  playOnce3,playOnce4,playOnce5, playOnce6, playOnce7, playOnce8, playOnce9, winscreen,player,text5);
+                            reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,sprite8,sprite9,textureclear
+                                    ,text2,text3,text11,text4,winMenu1,winMenu2,playOnce1,playOnce2,playOnce3,playOnce4,
+                                  playOnce5,playOnce6,playOnce7,playOnce8,playOnce9,winscreen,player,text5);
                         }
                         wpass2 = true;
                     }
@@ -471,7 +522,7 @@ int main()
                             player2score ++;
                             loction.reset2();
                             reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,sprite8,sprite9,textureclear
-                                  ,text2,text3,text4,winMenu1,winMenu2,playOnce1,playOnce2,playOnce3,playOnce4,
+                                  ,text2,text3,text11,text4,winMenu1,winMenu2,playOnce1,playOnce2,playOnce3,playOnce4,
                                   playOnce5,playOnce6,playOnce7,playOnce8,playOnce9,winscreen,player,text5);
                         }
                         wpass2 = true;
@@ -486,16 +537,47 @@ int main()
 
             }
             else if (loction.playCount == 9) {
-                loction.reset2();
-                reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,sprite8,sprite9,textureclear
-                        ,text2,text3,text4,winMenu1,winMenu2,playOnce1,playOnce2,playOnce3,playOnce4,
-                      playOnce5,playOnce6,playOnce7,playOnce8,playOnce9,winscreen,player,text5);
+                wpass1 = true;
+                winscreen.setFillColor(sf::Color::Bcolor);
+                text11.setFillColor(sf::Color::color);
+                winMenu1.setFillColor(sf::Color::color);
+                winMenu2.setFillColor(sf::Color::color);
+                text4.setFillColor(sf::Color::Bcolor);
+                text5.setFillColor(sf::Color::Bcolor);
+
+                if (event.type == sf::Event::MouseButtonPressed) {
+                    if (event.mouseButton.button == sf::Mouse::Left && wpass2 != true) {
+                        sf::Vector2f mouse2 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                        sf::FloatRect bounds10 = winMenu1.getGlobalBounds();
+                        sf::FloatRect bounds11 = winMenu2.getGlobalBounds();
+                        if (bounds10.contains(mouse2)) {
+                            window.close();
+                        }
+                        if (bounds11.contains(mouse2)) {
+                            std::cout << player1score;
+                            player1score ++;
+                            loction.reset2();
+                            reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,sprite8,sprite9,textureclear
+                                    ,text2,text3,text11,text4,winMenu1,winMenu2,playOnce1,playOnce2,playOnce3,playOnce4,
+                                  playOnce5,playOnce6,playOnce7,playOnce8,playOnce9,winscreen,player,text5);
+                        }
+                        wpass2 = true;
+                    }
+                }
+
+                if (event.type == sf::Event::MouseButtonReleased) {
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        wpass2 = false;
+                    }
+
+            }
             }
 
         }
 // displays the board
         window.clear();
         window.draw(shape);
+
         //window.draw(text);
         window.draw(text6);
         window.draw(text7);
@@ -520,10 +602,17 @@ int main()
         window.draw(winscreen);
         window.draw(text2);
         window.draw(text3);
+        window.draw(text11);
         window.draw(winMenu1);
         window.draw(winMenu2);
         window.draw(text4);
         window.draw(text5);
+        window.draw(firstScreen);
+        window.draw(text);
+        window.draw(playGame);
+        window.draw(Playagemtext);
+
+
 //displays everything
         window.display();
     }
@@ -532,18 +621,19 @@ int main()
 
 int reset(sf::Sprite & sprite1, sf::Sprite & sprite2, sf::Sprite & sprite3, sf::Sprite & sprite4, sf::Sprite & sprite5,
           sf::Sprite & sprite6, sf::Sprite & sprite7, sf::Sprite & sprite8, sf::Sprite & sprite9,
-          sf::Texture & textureclear, sf::Text & text2, sf::Text & text3, sf::Text & text4,
+          sf::Texture & textureclear, sf::Text & text2, sf::Text & text3,sf::Text & text11, sf::Text & text4,
           sf::RectangleShape & winMenu1, sf::RectangleShape & winMenu2, bool & playOnce1, bool & playOnce2, bool & playOnce3,
           bool & playOnce4, bool & playOnce5, bool & playOnce6, bool & playOnce7, bool & playOnce8,
           bool & playOnce9, sf::RectangleShape & winscreen,int & player, sf::Text & text5){
     player = 1;
-    text2.setFillColor(sf::Color(255,255,255,0));
-    text3.setFillColor(sf::Color(255,255,255,0));
-    text4.setFillColor(sf::Color(255,255,255,0));
-    text5.setFillColor(sf::Color(255,255,255,0));
-    winscreen.setFillColor(sf::Color(255,255,255,0));
-    winMenu1.setFillColor(sf::Color(255,255,255,0));
-    winMenu2.setFillColor(sf::Color(255,255,255,0));
+    text2.setFillColor(sf::Color::Transparent);
+    text3.setFillColor(sf::Color::Transparent);
+    text4.setFillColor(sf::Color::Transparent);
+    text5.setFillColor(sf::Color::Transparent);
+    text11.setFillColor(sf::Color::Transparent);
+    winscreen.setFillColor(sf::Color::Transparent);
+    winMenu1.setFillColor(sf::Color::Transparent);
+    winMenu2.setFillColor(sf::Color::Transparent);
     sprite1.setTexture(textureclear);
     sprite2.setTexture(textureclear);
     sprite3.setTexture(textureclear);
