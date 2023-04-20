@@ -74,7 +74,7 @@ public:
             }
 
             else if (spot2 == spot5 && spot5 == spot8 ){
-                if (spot2 == 1win){
+                if (spot2 == 1){
                     oWin = 1;
                 }
                 else if (spot2 == 2){
