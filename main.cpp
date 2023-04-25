@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
-#include "menu.cpp"
+#include "wincondion_and_reset.cpp"
 
 // makes it easy to change the color in the board
 #define Bcolor  Yellow
