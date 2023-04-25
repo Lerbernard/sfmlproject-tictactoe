@@ -107,10 +107,6 @@ int main()
     text5.setPosition(450.f,395.f);
     text5.setFillColor(sf::Color::Transparent);
 
-
-
-
-
     sf::Text text8("player 1 or 'o' score is : " ,myfont,30);
     text8.setPosition(150.f,30.f);
     text8.setFillColor(sf::Color:: color);
@@ -118,7 +114,6 @@ int main()
     sf::Text text9("player 2 or 'x' score is : " ,myfont,30);
     text9.setPosition(150.f,80.f);
     text9.setFillColor(sf::Color:: color);
-
 
     sf::RectangleShape winMenu1;
     winMenu1.setFillColor(sf::Color::Transparent);
@@ -246,7 +241,6 @@ int main()
                         Playagemtext.setFillColor(sf::Color::Transparent);
                         playGame.setFillColor(sf::Color::Transparent);
                         play = true;
-
                     }
                     wpass3 = true;
                 }
