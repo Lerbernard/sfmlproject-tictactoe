@@ -30,12 +30,12 @@ int main()
     shape.setSize(sf::Vector2f(700.f, 700.f));
     shape.setPosition(0.f, 0.f);
     shape.setFillColor(sf::Color::Bcolor);
-
+// this is the first background screen that shows up when the program is used
     sf::RectangleShape firstScreen;
     firstScreen.setSize(sf::Vector2f(700.f, 700.f));
     firstScreen.setPosition(0.f, 0.f);
     firstScreen.setFillColor(sf::Color::Bcolor);
-
+// this will be use as the background for the winn screen and draw screen
     sf::RectangleShape winscreen;
     winscreen.setSize(sf::Vector2f(700.f, 700.f));
     winscreen.setPosition(0.f, 0.f);
@@ -46,6 +46,14 @@ int main()
     myfont.loadFromFile("../COMIC.ttf");
 
 
+
+// this is the rectange that will be used as a button in the fist screen to play the game
+    sf::RectangleShape playGame;
+    playGame.setFillColor(sf::Color::color);
+    playGame.setSize(sf::Vector2f(300.f, 170.f));
+    playGame.setPosition(200,400);
+
+// these are all the text in the game
     sf::Text text("welcome to lee's tic-tac-toc game",myfont,30);
     text.setPosition(100.f,60.f);
     text.setFillColor(sf::Color::color);
@@ -53,12 +61,6 @@ int main()
     sf::Text Playagemtext("play",myfont,100);
     Playagemtext.setPosition(260.f,410.f);
     Playagemtext.setFillColor(sf::Color::Bcolor);
-
-    sf::RectangleShape playGame;
-    playGame.setFillColor(sf::Color::color);
-    playGame.setSize(sf::Vector2f(300.f, 170.f));
-    playGame.setPosition(200,400);
-
 
     sf::Text text2("o wins",myfont,200);
     text2.setPosition(70.f,50.f);
@@ -88,11 +90,13 @@ int main()
     text9.setPosition(150.f,80.f);
     text9.setFillColor(sf::Color:: color);
 
+// these are the play again and exit rectangles
+    //exeit
     sf::RectangleShape winMenu1;
     winMenu1.setFillColor(sf::Color::Transparent);
     winMenu1.setSize(sf::Vector2f(250.f, 130.f));
     winMenu1.setPosition(60,400);
-
+    // play again
     sf::RectangleShape winMenu2;
     winMenu2.setFillColor(sf::Color::Transparent);
     winMenu2.setSize(sf::Vector2f(250.f, 130.f));
@@ -116,8 +120,6 @@ int main()
     sf::RectangleShape line4(sf::Vector2f(15.f, 470.f));
     line4.setFillColor(sf::Color::color);
     line4.setPosition(sf::Vector2f(250.f, 150.f));
-
-// use to display in the 9 sprites
 
 //displays a blue square
     sf::Texture textureclear;
@@ -185,10 +187,10 @@ int main()
 
 //use to make actions while the window is up
     while (window.isOpen()) {
-
+// turns the int into a strring so that it could be displayed
         std::string player1scoreString = std::to_string(playCon.player1score );
         std::string player2scoreString = std::to_string(playCon.player2score);
-
+// theses 2 are the displayed score
         sf::Text text6(player1scoreString ,myfont,30);
         text6.setPosition(490.f,32.f);
         text6.setFillColor(sf::Color:: color);
@@ -196,7 +198,7 @@ int main()
         sf::Text text7(player2scoreString ,myfont,30);
         text7.setPosition(500.f,82.f);
         text7.setFillColor(sf::Color:: color);
-    //event will be use to make the game playable
+    //event will be used to make the game playable
         sf::Event event;
     //use to allow the make actions
         while (window.pollEvent(event)) {
@@ -204,6 +206,7 @@ int main()
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
+            // allows the use to lay the game when they press play
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left && playCon.wpass3 != true) {
                     sf::Vector2f mouse300 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -223,6 +226,7 @@ int main()
                     playCon.wpass3 = false;
                 }
             }
+            //this add delay betwen the click and the use being able to play
             if (playCon.play == true && playCon.delay< 20) {
                 playCon.delay++;
             }
@@ -242,7 +246,9 @@ int main()
                     sf::FloatRect bounds7 = sprite7.getGlobalBounds();
                     sf::FloatRect bounds8 = sprite8.getGlobalBounds();
                     sf::FloatRect bounds9 = sprite9.getGlobalBounds();
-                    // checks if mouse click iss in a spite and changes the prite to a "x" or an "o"
+                    // checks if mouse click iss in a spite and changes the sprite to a "x" or an "o"
+                    // changes the player
+                    //adds to playcount
                     if (bounds1.contains(mouse1) && playCon.playOnce1 != true) {
                         switch (playCon.player) {
                             case 1:
@@ -431,13 +437,19 @@ int main()
                     playCon.wpass1 = false;
                 }
             }
+            //checks if one of the wining condition is meet
             loction.ifWinGame();
+
+            //add delay betwwen the winner being found and the screen changing
             if (loction.playCount == 9|| loction.oWin == 1 || loction.xWin ==1 && playCon.delay< 25){
                 playCon.delay++;
             }
+//changes the screen to show which person won or if it was a draw
+//allows they user to exit or play again
+//if they choose play again the game will reset everything to that they can play again
 
             if (loction.oWin == 1 && playCon.delay>= 25) {
-                playCon.wpass1 = true;
+                playCon.wpass2 = true;
                 winscreen.setFillColor(sf::Color::Bcolor);
                 text2.setFillColor(sf::Color::color);
                 winMenu1.setFillColor(sf::Color::color);
@@ -463,13 +475,13 @@ int main()
                                   winMenu1,winMenu2, winscreen,text5);
                             playCon.delay= 20;
                         }
-                        playCon.delay= true;
+                        playCon.wpass2 = true;
                     }
                 }
 
                 if (event.type == sf::Event::MouseButtonReleased) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
-                        playCon.delay= false;
+                        playCon.wpass2= false;
                     }
                 }
 
@@ -477,7 +489,7 @@ int main()
 
 
             else if (loction.xWin == 1 && playCon.delay>= 25) {
-                playCon.wpass1 = true;
+                playCon.wpass2 = true;
                 winscreen.setFillColor(sf::Color::Bcolor);
                 text3.setFillColor(sf::Color::color);
                 winMenu1.setFillColor(sf::Color::color);
@@ -503,20 +515,20 @@ int main()
                                   winMenu1,winMenu2, winscreen,text5);
                             playCon.delay= 20;
                         }
-                        playCon.delay= true;
+                        playCon.wpass2= true;
                     }
                 }
 
                 if (event.type == sf::Event::MouseButtonReleased) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
-                        playCon.delay= false;
+                        playCon.wpass2= false;
                     }
                 }
 
             }
             else if (loction.playCount == 9 && playCon.delay>= 25) {
 
-                playCon.wpass1 = true;
+                playCon.wpass2 = true;
                 winscreen.setFillColor(sf::Color::Bcolor);
                 text11.setFillColor(sf::Color::color);
                 winMenu1.setFillColor(sf::Color::color);
@@ -542,13 +554,13 @@ int main()
                                   winMenu1,winMenu2, winscreen,text5);
                             playCon.delay= 20;
                         }
-                        playCon.delay= true;
+                        playCon.wpass2= true;
                     }
                 }
 
                 if (event.type == sf::Event::MouseButtonReleased) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
-                        playCon.delay= false;
+                        playCon.wpass2= false;
                     }
 
             }

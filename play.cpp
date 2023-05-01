@@ -3,7 +3,7 @@
 //
 class Play{
 public:
-
+// this is used to  reset the game
     int reset3(){
         player = 1;
         playOnce1 = false;
@@ -17,8 +17,11 @@ public:
         playOnce9 = false;
         return 0;
     }
+    //use to make sure that the game is playable after the user presses play in the first screen
     bool play = false;
+// used to add delay to the game
     long delay = 0;
+    //keeeps the player score
     int player1score = 0;
     int player2score = 0;
 // use to determine whether player 1 or player 2 is playing
@@ -35,7 +38,8 @@ public:
     bool playOnce9 = false;
     bool playOnce300 = false;
 
-// used to make the sprite click once
+// used to make the button is pressed once
     bool wpass1;
+    bool wpass2;
     bool wpass3;
 };
