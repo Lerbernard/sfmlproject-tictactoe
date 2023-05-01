@@ -37,6 +37,5 @@ public:
 
 // used to make the sprite click once
     bool wpass1;
-    bool wpass2;
     bool wpass3;
 };
