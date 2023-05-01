@@ -3,7 +3,7 @@ project(sfmlproject)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(sfmlproject main.cpp main.h "wincondion_and_reset.cpp" main.h)
+add_executable(sfmlproject main.cpp main.h "wincondion_and_reset.cpp" main.h play.cpp)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/SFML-2.5.1/lib/cmake/SFML)

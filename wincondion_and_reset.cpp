@@ -1,12 +1,15 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
 
+
+// class that checks and has the wining condition
 class winCon{
 public:
+    //this will be used to check if o or x won and what should be displayed
     int oWin = 0;
     int xWin = 0;
-    int playCount = 0;
 
+    // this keeps tracks of how many times the players play(both combined)
+    int playCount = 0;
+    // the spots win be set to either 1 for o or 2 for X and use to check for the win condition function
     int spot1 = 11;
     int spot2 = 12;
     int spot3 = 13;
@@ -16,6 +19,8 @@ public:
     int spot7 = 17;
     int spot8 = 18;
     int spot9 = 19;
+
+    // this function is used to  reset everything to the default state so that we can play multiple times
     int reset2(){
         oWin = 0;
         xWin = 0;
@@ -33,8 +38,7 @@ public:
         return 0;
     }
 
-
-
+    // function that checks if someone won and set Owin or Xwin  to 1
     int ifWinGame(){
         if (playCount >= 5){
             if (spot1 == spot2 && spot2 == spot3 ){

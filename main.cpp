@@ -2,51 +2,24 @@
 #include <iostream>
 #include <string>
 #include "wincondion_and_reset.cpp"
+#include "play.cpp"
 
 // makes it easy to change the color in the board
-#define Bcolor  Yellow
-#define color  Red
+#define Bcolor  Blue
+#define color  Green
 
-void sleep(float seconds){
-    clock_t startClock = clock();
-    float secondsAhead = seconds * CLOCKS_PER_SEC;
-// do nothing until the elapsed time has passed.
-    while(clock() < startClock+secondsAhead);
-    return;
-}
-
+// the declaration foŕ the reset function that set everything back to default
+// so that we can play multiple times without having to restart the program
 int reset(sf::Sprite & sprite1, sf::Sprite & sprite2, sf::Sprite & sprite3, sf::Sprite & sprite4, sf::Sprite & sprite5,
           sf::Sprite & sprite6, sf::Sprite & sprite7, sf::Sprite & sprite8, sf::Sprite & sprite9,
           sf::Texture & textureclear, sf::Text & text2, sf::Text & text3,sf::Text & text11, sf::Text & text4,
-          sf::RectangleShape & winMenu1, sf::RectangleShape & winMenu2, bool & playOnce1, bool & playOnce2, bool & playOnce3,
-          bool & playOnce4, bool & playOnce5, bool & playOnce6, bool & playOnce7, bool & playOnce8,
-          bool & playOnce9, sf::RectangleShape & winscreen, int & player, sf::Text & text5);
+          sf::RectangleShape & winMenu1, sf::RectangleShape & winMenu2,  sf::RectangleShape & winscreen, sf::Text & text5);
 
 int main()
 {
+// calling the class from wincondition_and_reset.cpp
  winCon loction = winCon();
- bool scoreOnce = false;
- bool play = false;
-    int player1score = 0;
-    int player2score = 0;
-// use to determine whether player 1 or player 2 is playing
-    int player = 1;
-// used to make the sprite clickable once
-    bool playOnce1 = false;
-    bool playOnce2 = false;
-    bool playOnce3 = false;
-    bool playOnce4 = false;
-    bool playOnce5 = false;
-    bool playOnce6 = false;
-    bool playOnce7 = false;
-    bool playOnce8 = false;
-    bool playOnce9 = false;
-    bool playOnce300 = false;
-
-// used to make the sprite click once
-    bool wpass1;
-    bool wpass2;
-    bool wpass3;
+ Play playCon = Play();
 
 
 // makes the window
@@ -213,8 +186,8 @@ int main()
 //use to make actions while the window is up
     while (window.isOpen()) {
 
-        std::string player1scoreString = std::to_string(player1score );
-        std::string player2scoreString = std::to_string(player2score);
+        std::string player1scoreString = std::to_string(playCon.player1score );
+        std::string player2scoreString = std::to_string(playCon.player2score);
 
         sf::Text text6(player1scoreString ,myfont,30);
         text6.setPosition(490.f,32.f);
@@ -232,27 +205,32 @@ int main()
                 window.close();
             }
             if (event.type == sf::Event::MouseButtonPressed) {
-                if (event.mouseButton.button == sf::Mouse::Left && wpass3 != true) {
+                if (event.mouseButton.button == sf::Mouse::Left && playCon.wpass3 != true) {
                     sf::Vector2f mouse300 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                     sf::FloatRect bounds300 = playGame.getGlobalBounds();
-                    if (bounds300.contains(mouse300) && playOnce300 != true) {
+                    if (bounds300.contains(mouse300) && playCon.playOnce300 != true) {
                         firstScreen.setFillColor(sf::Color::Transparent);
                         text.setFillColor(sf::Color::Transparent);
                         Playagemtext.setFillColor(sf::Color::Transparent);
                         playGame.setFillColor(sf::Color::Transparent);
-                        play = true;
+                        playCon.play = true;
                     }
-                    wpass3 = true;
+                    playCon.wpass3 = true;
                 }
             }
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    wpass3 = false;
+                    playCon.wpass3 = false;
                 }
             }
+            if (playCon.play == true && playCon.delay< 20) {
+                playCon.delay++;
+            }
+
+
             //get the location of the sprites
-            if (event.type == sf::Event::MouseButtonPressed && play == true ) {
-                if (event.mouseButton.button == sf::Mouse::Left && wpass1 != true /* && wpass3 == false*/) {
+            if (event.type == sf::Event::MouseButtonPressed && playCon.play == true&& playCon.delay>= 20 ) {
+                if (event.mouseButton.button == sf::Mouse::Left && playCon.wpass1 != true) {
 
                     sf::Vector2f mouse1 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                     sf::FloatRect bounds1 = sprite1.getGlobalBounds();
@@ -265,199 +243,201 @@ int main()
                     sf::FloatRect bounds8 = sprite8.getGlobalBounds();
                     sf::FloatRect bounds9 = sprite9.getGlobalBounds();
                     // checks if mouse click iss in a spite and changes the prite to a "x" or an "o"
-                    if (bounds1.contains(mouse1) && playOnce1 != true) {
-                        switch (player) {
+                    if (bounds1.contains(mouse1) && playCon.playOnce1 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite1.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.spot1 = 1;
                                 loction.playCount++;
-                                playOnce1 = true;
+                                playCon.playOnce1 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite1.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.spot1 = 2;
                                 loction.playCount++;
-                                playOnce1 = true;
+                                playCon.playOnce1 = true;
                                 break;
                         }
                     }
-                    if (bounds2.contains(mouse1) && playOnce2 != true) {
-                        switch (player) {
+                    if (bounds2.contains(mouse1) && playCon.playOnce2 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite2.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.spot2 = 1;
                                 loction.playCount++;
-                                playOnce2 = true;
+                                playCon.playOnce2 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite2.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.spot2 = 2;
                                 loction.playCount++;
-                                playOnce2 = true;
+                                playCon.playOnce2 = true;
                                 break;
                         }
                     }
-                    if (bounds3.contains(mouse1) && playOnce3 != true) {
-                        switch (player) {
+                    if (bounds3.contains(mouse1) && playCon.playOnce3 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite3.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.spot3 = 1;
                                 loction.playCount++;
-                                playOnce3 = true;
+                                playCon.playOnce3 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite3.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.spot3 = 2;
                                 loction.playCount++;
-                                playOnce3 = true;
+                                playCon.playOnce3 = true;
                                 break;
                         }
                     }
-                    if (bounds4.contains(mouse1) && playOnce4 != true) {
-                        switch (player) {
+                    if (bounds4.contains(mouse1) && playCon.playOnce4 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite4.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.spot4 = 1;
                                 loction.playCount++;
-                                playOnce4 = true;
+                                playCon.playOnce4 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite4.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.spot4 = 2;
                                 loction.playCount++;
-                                playOnce4 = true;
+                                playCon.playOnce4 = true;
                                 break;
                         }
                     }
-                    if (bounds5.contains(mouse1) && playOnce5 != true) {
-                        switch (player) {
+                    if (bounds5.contains(mouse1) && playCon.playOnce5 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite5.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.spot5 = 1;
                                 loction.playCount++;
-                                playOnce5 = true;
+                                playCon.playOnce5 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite5.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.spot5 = 2;
                                 loction.playCount++;
-                                playOnce5 = true;
+                                playCon.playOnce5 = true;
                                 break;
                         }
                     }
-                    if (bounds6.contains(mouse1) && playOnce6 != true) {
-                        switch (player) {
+                    if (bounds6.contains(mouse1) && playCon.playOnce6 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite6.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.spot6 = 1;
                                 loction.playCount++;
-                                playOnce6 = true;
+                                playCon.playOnce6 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite6.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.spot6 = 2;
                                 loction.playCount++;
-                                playOnce6 = true;
+                                playCon.playOnce6 = true;
                                 break;
                         }
                     }
-                    if (bounds7.contains(mouse1) && playOnce7 != true) {
-                        switch (player) {
+                    if (bounds7.contains(mouse1) && playCon.playOnce7 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite7.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.spot7 = 1;
                                 loction.playCount++;
-                                playOnce7 = true;
+                                playCon.playOnce7 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite7.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.spot7 = 2;
                                 loction.playCount++;
-                                playOnce7 = true;
+                                playCon.playOnce7 = true;
                                 break;
                         }
                     }
-                    if (bounds8.contains(mouse1) && playOnce8 != true) {
-                        switch (player) {
+                    if (bounds8.contains(mouse1) && playCon.playOnce8 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite8.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.spot8 = 1;
                                 loction.playCount++;
-                                playOnce8 = true;
+                                playCon.playOnce8 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite8.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.spot8 = 2;
                                 loction.playCount++;
-                                playOnce8 = true;
+                                playCon.playOnce8 = true;
                                 break;
                         }
                     }
-                    if (bounds9.contains(mouse1) && playOnce9 != true) {
-                        switch (player) {
+                    if (bounds9.contains(mouse1) && playCon.playOnce9 != true) {
+                        switch (playCon.player) {
                             case 1:
                                 std::cout << "click\n";
                                 sprite9.setTexture(textureO);
-                                player++;
+                                playCon.player++;
                                 loction.playCount++;
                                 loction.spot9 = 1;
-                                playOnce9 = true;
+                                playCon.playOnce9 = true;
                                 break;
                             case 2:
                                 std::cout << "click\n";
                                 sprite9.setTexture(textureX);
-                                player--;
+                                playCon.player--;
                                 loction.playCount++;
                                 loction.spot9 = 2;
-                                playOnce9 = true;
+                                playCon.playOnce9 = true;
                                 break;
                         }
                     }
                 }
-                wpass1 = true;
+                playCon.wpass1 = true;
             }
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    wpass1 = false;
+                    playCon.wpass1 = false;
                 }
             }
-                    loction.ifWinGame();
-            sf::Time t2 = sf::seconds(1000);
-            t2.asSeconds();
-            if (loction.oWin == 1) {
-                wpass1 = true;
+            loction.ifWinGame();
+            if (loction.playCount == 9|| loction.oWin == 1 || loction.xWin ==1 && playCon.delay< 25){
+                playCon.delay++;
+            }
+
+            if (loction.oWin == 1 && playCon.delay>= 25) {
+                playCon.wpass1 = true;
                 winscreen.setFillColor(sf::Color::Bcolor);
                 text2.setFillColor(sf::Color::color);
                 winMenu1.setFillColor(sf::Color::color);
@@ -466,7 +446,7 @@ int main()
                 text5.setFillColor(sf::Color::Bcolor);
 
                 if (event.type == sf::Event::MouseButtonPressed) {
-                    if (event.mouseButton.button == sf::Mouse::Left && wpass2 != true) {
+                    if (event.mouseButton.button == sf::Mouse::Left && playCon.delay!= true) {
                         sf::Vector2f mouse2 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                         sf::FloatRect bounds10 = winMenu1.getGlobalBounds();
                         sf::FloatRect bounds11 = winMenu2.getGlobalBounds();
@@ -474,28 +454,30 @@ int main()
                             window.close();
                         }
                         if (bounds11.contains(mouse2)) {
-                            std::cout << player1score;
-                            player1score ++;
+                            std::cout << playCon.player1score;
+                            playCon.player1score ++;
                             loction.reset2();
-                            reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,sprite8,sprite9,textureclear
-                                    ,text2,text3,text11,text4,winMenu1,winMenu2,playOnce1,playOnce2,playOnce3,playOnce4,
-                                  playOnce5,playOnce6,playOnce7,playOnce8,playOnce9,winscreen,player,text5);
+                            playCon.reset3();
+                            reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,
+                                  sprite8,sprite9,textureclear,text2,text3,text11,text4,
+                                  winMenu1,winMenu2, winscreen,text5);
+                            playCon.delay= 20;
                         }
-                        wpass2 = true;
+                        playCon.delay= true;
                     }
                 }
 
                 if (event.type == sf::Event::MouseButtonReleased) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
-                        wpass2 = false;
+                        playCon.delay= false;
                     }
                 }
 
             }
 
 
-            else if (loction.xWin == 1) {
-                wpass1 = true;
+            else if (loction.xWin == 1 && playCon.delay>= 25) {
+                playCon.wpass1 = true;
                 winscreen.setFillColor(sf::Color::Bcolor);
                 text3.setFillColor(sf::Color::color);
                 winMenu1.setFillColor(sf::Color::color);
@@ -505,7 +487,7 @@ int main()
 
 
                 if (event.type == sf::Event::MouseButtonPressed) {
-                    if (event.mouseButton.button == sf::Mouse::Left && wpass2 != true) {
+                    if (event.mouseButton.button == sf::Mouse::Left && playCon.delay!= true) {
                         sf::Vector2f mouse2 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                         sf::FloatRect bounds10 = winMenu1.getGlobalBounds();
                         sf::FloatRect bounds11 = winMenu2.getGlobalBounds();
@@ -513,25 +495,28 @@ int main()
                             window.close();
                         }
                         if (bounds11.contains(mouse2)) {
-                            player2score ++;
+                            playCon.player2score ++;
                             loction.reset2();
-                            reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,sprite8,sprite9,textureclear
-                                  ,text2,text3,text11,text4,winMenu1,winMenu2,playOnce1,playOnce2,playOnce3,playOnce4,
-                                  playOnce5,playOnce6,playOnce7,playOnce8,playOnce9,winscreen,player,text5);
+                            playCon.reset3();
+                            reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,
+                                  sprite8,sprite9,textureclear,text2,text3,text11,text4,
+                                  winMenu1,winMenu2, winscreen,text5);
+                            playCon.delay= 20;
                         }
-                        wpass2 = true;
+                        playCon.delay= true;
                     }
                 }
 
                 if (event.type == sf::Event::MouseButtonReleased) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
-                        wpass2 = false;
+                        playCon.delay= false;
                     }
                 }
 
             }
-            else if (loction.playCount == 9) {
-                wpass1 = true;
+            else if (loction.playCount == 9 && playCon.delay>= 25) {
+
+                playCon.wpass1 = true;
                 winscreen.setFillColor(sf::Color::Bcolor);
                 text11.setFillColor(sf::Color::color);
                 winMenu1.setFillColor(sf::Color::color);
@@ -540,7 +525,7 @@ int main()
                 text5.setFillColor(sf::Color::Bcolor);
 
                 if (event.type == sf::Event::MouseButtonPressed) {
-                    if (event.mouseButton.button == sf::Mouse::Left && wpass2 != true) {
+                    if (event.mouseButton.button == sf::Mouse::Left && playCon.delay!= true) {
                         sf::Vector2f mouse2 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                         sf::FloatRect bounds10 = winMenu1.getGlobalBounds();
                         sf::FloatRect bounds11 = winMenu2.getGlobalBounds();
@@ -548,20 +533,22 @@ int main()
                             window.close();
                         }
                         if (bounds11.contains(mouse2)) {
-                            std::cout << player1score;
-                            player1score ++;
+                            std::cout << playCon.player1score;
+                            playCon.player1score ++;
                             loction.reset2();
-                            reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,sprite8,sprite9,textureclear
-                                    ,text2,text3,text11,text4,winMenu1,winMenu2,playOnce1,playOnce2,playOnce3,playOnce4,
-                                  playOnce5,playOnce6,playOnce7,playOnce8,playOnce9,winscreen,player,text5);
+                            playCon.reset3();
+                            reset(sprite1,sprite2,sprite3,sprite4,sprite5,sprite6,sprite7,
+                                  sprite8,sprite9,textureclear,text2,text3,text11,text4,
+                                  winMenu1,winMenu2, winscreen,text5);
+                            playCon.delay= 20;
                         }
-                        wpass2 = true;
+                        playCon.delay= true;
                     }
                 }
 
                 if (event.type == sf::Event::MouseButtonReleased) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
-                        wpass2 = false;
+                        playCon.delay= false;
                     }
 
             }
@@ -572,7 +559,7 @@ int main()
         window.clear();
         window.draw(shape);
 
-        //window.draw(text);
+        window.draw(text);
         window.draw(text6);
         window.draw(text7);
         window.draw(text8);
@@ -593,6 +580,8 @@ int main()
         window.draw(sprite8);
         window.draw(sprite9);
 
+// displays the various screens like O win screen, x win screen and draw screen
+// also displays the option in those screens
         window.draw(winscreen);
         window.draw(text2);
         window.draw(text3);
@@ -612,14 +601,12 @@ int main()
     }
     return 0;
 }
-
+// the body of the reset funtion
 int reset(sf::Sprite & sprite1, sf::Sprite & sprite2, sf::Sprite & sprite3, sf::Sprite & sprite4, sf::Sprite & sprite5,
           sf::Sprite & sprite6, sf::Sprite & sprite7, sf::Sprite & sprite8, sf::Sprite & sprite9,
           sf::Texture & textureclear, sf::Text & text2, sf::Text & text3,sf::Text & text11, sf::Text & text4,
-          sf::RectangleShape & winMenu1, sf::RectangleShape & winMenu2, bool & playOnce1, bool & playOnce2, bool & playOnce3,
-          bool & playOnce4, bool & playOnce5, bool & playOnce6, bool & playOnce7, bool & playOnce8,
-          bool & playOnce9, sf::RectangleShape & winscreen,int & player, sf::Text & text5){
-    player = 1;
+          sf::RectangleShape & winMenu1, sf::RectangleShape & winMenu2,  sf::RectangleShape & winscreen, sf::Text & text5){
+
     text2.setFillColor(sf::Color::Transparent);
     text3.setFillColor(sf::Color::Transparent);
     text4.setFillColor(sf::Color::Transparent);
@@ -637,14 +624,6 @@ int reset(sf::Sprite & sprite1, sf::Sprite & sprite2, sf::Sprite & sprite3, sf::
     sprite7.setTexture(textureclear);
     sprite8.setTexture(textureclear);
     sprite9.setTexture(textureclear);
-    playOnce1 = false;
-    playOnce2 = false;
-    playOnce3 = false;
-    playOnce4 = false;
-    playOnce5 = false;
-    playOnce6 = false;
-    playOnce7 = false;
-    playOnce8 = false;
-    playOnce9 = false;
+
     return 0;
 }
