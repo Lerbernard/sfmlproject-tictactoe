@@ -7,4 +7,4 @@ tic-tac-toe has always been one of my favorite games to play
 it's a fun game that is quick to play easy to learn and a great pass time game 
 Lee Bernard - https://github.com/Lerbernard/
 [![gamerunning.png](https://i.postimg.cc/SK5hm6tC/gamerunning.png)](https://postimg.cc/VSjTRCwk)
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8491/badge)](https://www.bestpractices.dev/projects/8491)
+
